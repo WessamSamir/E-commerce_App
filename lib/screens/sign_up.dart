@@ -1,9 +1,12 @@
-import 'package:flutter/services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_demo/screens/login.dart';
 import 'package:flutter/material.dart';
 import '../constants.dart';
+import '../models/Users.dart';
 import '../widgets/CustemTextFormField.dart';
 import 'package:flutter_demo/services/auth.dart';
+import 'package:flutter_demo/services/store.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -16,6 +19,7 @@ class _SignUpState extends State<SignUp> {
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   String? _email, _password, _confirmPass, _name, _phone;
   final _auth = Auth();
+  final _store = Store();
   @override
   Widget build(BuildContext context) {
     final currentWidth = MediaQuery.of(context).size.width;
@@ -30,8 +34,8 @@ class _SignUpState extends State<SignUp> {
               padding: const EdgeInsets.all(20.0),
               child: Column(
                 children: [
-                  SizedBox(
-                    height: 50,
+                  const SizedBox(
+                    height: 60,
                   ),
                   Text(
                     'Create new account',
@@ -55,7 +59,7 @@ class _SignUpState extends State<SignUp> {
                     hint: 'Full Name',
                     icon: Icons.person,
                     onClick: (value) {
-                      _name = value;
+                      _name = value!;
                     },
                   ),
                   SizedBox(
@@ -66,7 +70,7 @@ class _SignUpState extends State<SignUp> {
                     icon: Icons.phone,
                     inputType: TextInputType.phone,
                     onClick: (value) {
-                      _phone = value;
+                      _phone = value!;
                     },
                   ),
                   SizedBox(
@@ -77,7 +81,7 @@ class _SignUpState extends State<SignUp> {
                     icon: Icons.email,
                     inputType: TextInputType.emailAddress,
                     onClick: (value) {
-                      _email = value;
+                      _email = value!;
                     },
                   ),
                   SizedBox(
@@ -88,7 +92,7 @@ class _SignUpState extends State<SignUp> {
                     icon: Icons.lock,
                     secure: true,
                     onClick: (value) {
-                      _password = value;
+                      _password = value!;
                     },
                   ),
                   SizedBox(
@@ -99,7 +103,7 @@ class _SignUpState extends State<SignUp> {
                     icon: Icons.lock,
                     secure: true,
                     onClick: (value) {
-                      _confirmPass = value;
+                      _confirmPass = value!;
                     },
                   ),
                   SizedBox(
@@ -108,54 +112,67 @@ class _SignUpState extends State<SignUp> {
                   Container(
                     width: currentWidth * 0.6,
                     height: currentHeight * 0.13,
-                    child: Builder(
-                      builder: (context) {
-                        return ElevatedButton(
-                          onPressed: () async {
-                            if (_globalKey.currentState!.validate()) {
-                              if (_password == _confirmPass) {
-                                try {
-                                  _globalKey.currentState!.save();
-                                  final authResult =
-                                      await _auth.SignUp(_email!, _password!);
-                                } catch (e) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        backgroundColor: KMainColor,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-                                        ),
-                                        content: Text(
-                                          e.toString(),
-                                        ),
+                    child: Builder(builder: (context) {
+                      return ElevatedButton(
+                        onPressed: () async {
+                          if (_globalKey.currentState!.validate()) {
+                            if (_password == _confirmPass) {
+                              try {
+                                _globalKey.currentState!.save();
+                                final authResult =
+                                    await _auth.SignUp(_email!, _password!);
+                                Fluttertoast.showToast(
+                                    msg: "Registered Successfully",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.TOP,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: KMainColor,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                                _store.addUser(Users(
+                                    name: _name,
+                                    phone: _phone,
+                                    email: _email,
+                                    password: _password));
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    backgroundColor: KMainColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(20),
+                                          topRight: Radius.circular(20)),
                                     ),
-                                  );
-                                }
-                              } else {
-                                print('error');
+                                    content: Text(
+                                      e.toString(),
+                                    ),
+                                  ),
+                                );
                               }
-                              // print(_email);
-                              // print(_password);
-                              // print(_confirmPass);
+                            } else {
+                              print('error');
                             }
-                          },
-                          child: Text(
-                            'Register',
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
+                            // print(_email);
+                            // print(_password);
+                            // print(_confirmPass);
+                          }
+                        },
+                        child: Text(
+                          'Register',
+                          style: TextStyle(
+                            fontSize: 20,
                           ),
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStatePropertyAll<Color>(KMainColor),
-                              shape:
-                                  MaterialStateProperty.all<RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(24.0),
-                                          side: BorderSide(color: Colors.white)))),
-                        );
-                      }
-                    ),
+                        ),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStatePropertyAll<Color>(KMainColor),
+                            shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(24.0),
+                                    side: BorderSide(color: Colors.white)))),
+                      );
+                    }),
                   ),
                   SizedBox(
                     height: 20,

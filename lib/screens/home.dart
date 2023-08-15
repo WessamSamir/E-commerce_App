@@ -7,6 +7,7 @@ import 'package:fluid_bottom_nav_bar/fluid_bottom_nav_bar.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import '../models/products.dart';
+
 class home extends StatefulWidget {
   const home({super.key});
 
@@ -15,12 +16,13 @@ class home extends StatefulWidget {
 }
 
 class _homeState extends State<home> {
-
-  List<Color>barcolor=[Colors.white,
+  List<Color> barcolor = [
+    Colors.white,
     Color.fromRGBO(255, 33, 131, 1.0),
     Colors.white,
     Colors.lightBlueAccent,
-    Colors.white];
+    Colors.white
+  ];
 
   List<IconData> listOfIcons = [
     FontAwesomeIcons.home,
@@ -37,30 +39,61 @@ class _homeState extends State<home> {
     'Cart',
     'Account',
   ];
-  double screenWidth=0;
-  TextEditingController? search_value ;
-  bool ispressed=true;
-  String app_name='hello';
-  bool notification= true;
-  Color online=Colors.green;
-  Color pressed=Color.fromRGBO(2, 63, 40, 1);
-  List slideShow=["assets/images/Sale Promotion Digital Display HD - Made with PosterMyWall.gif",
-    "assets/images/Huge Sale Twitter Share Post Template - Made with PosterMyWall (2).gif"];
-  String Image_url= "https://images.pexels.com/photos/213780/pexels-photo-213780.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500";
-  int current_index=0;
-  List<IconData> navbar_icons=[FontAwesomeIcons.home,MdiIcons.earth,MdiIcons.cartOutline,FontAwesomeIcons.userCircle];
-  List<products> fav=[];
-  List<products> cart=[];
-  List<products> home_products=[
-    products(false,false, product_name: 'Cookies', product_price: 50, product_img: 'https://th.bing.com/th/id/OIP.6e8n0Naqmwjg-IbT1UjkewHaE6?pid=ImgDet&rs=1', category: 'Food', description: '' ),
-    products(false,false, product_name: 'Cookies', product_price: 50, product_img: 'https://th.bing.com/th/id/OIP.6e8n0Naqmwjg-IbT1UjkewHaE6?pid=ImgDet&rs=1', category: 'Food', description: ''),
+  double screenWidth = 0;
+  TextEditingController? search_value;
+  bool ispressed = true;
+  String app_name = 'hello';
+  bool notification = true;
+  Color online = Colors.green;
+  Color pressed = Color.fromRGBO(2, 63, 40, 1);
+  List slideShow = [
+    "Assets/images/Sale Promotion Digital Display HD - Made with PosterMyWall.gif",
+    // "Assets/images/Sale Discount Poster Banner - Made with PosterMyWall.gif",
+    "Assets/images/Huge Sale Twitter Share Post Template - Made with PosterMyWall (2).gif"
+  ];
+  String Image_url =
+      "https://images.pexels.com/photos/213780/pexels-photo-213780.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500";
+  int current_index = 0;
+  List<IconData> navbar_icons = [
+    FontAwesomeIcons.home,
+    MdiIcons.earth,
+    MdiIcons.cartOutline,
+    FontAwesomeIcons.userCircle
+  ];
+  List<products> fav = [];
+  List<products> cart = [];
+  List<products> home_products = [
+    products(false, false,
+        product_name: 'Cookies',
+        product_price: 50,
+        product_img:
+            'https://th.bing.com/th/id/OIP.6e8n0Naqmwjg-IbT1UjkewHaE6?pid=ImgDet&rs=1',
+        category: 'Food',
+        description: ''),
+    products(false, false,
+        product_name: 'Cookies',
+        product_price: 50,
+        product_img:
+            'https://th.bing.com/th/id/OIP.6e8n0Naqmwjg-IbT1UjkewHaE6?pid=ImgDet&rs=1',
+        category: 'Food',
+        description: ''),
   ];
   @override
   Widget build(BuildContext context) {
     final screenWidth1 = MediaQuery.of(context).size.width;
-    screenWidth=screenWidth1;
-    List<Widget> Slidshow=slideShow.map((url) =>Image.asset(url),).toList();
-    List<Widget> pages=[home_page(screenWidth1, Slidshow,home_products),fav_page(screenWidth1,home_products),Container(),cart_page(screenWidth,home_products),Container()];
+    screenWidth = screenWidth1;
+    List<Widget> Slidshow = slideShow
+        .map(
+          (url) => Image.asset(url),
+        )
+        .toList();
+    List<Widget> pages = [
+      home_page(screenWidth1, Slidshow, home_products),
+      fav_page(screenWidth1, home_products),
+      Container(),
+      cart_page(screenWidth, home_products),
+      Container()
+    ];
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.white,
@@ -74,7 +107,9 @@ class _homeState extends State<home> {
                   fontSize: 30.0,
                 ),
               ),
-              SizedBox(width: screenWidth1*0.1,),
+              SizedBox(
+                width: screenWidth1 * 0.1,
+              ),
               Text(
                 '${listOfStrings[current_index]}',
                 style: const TextStyle(
@@ -83,29 +118,29 @@ class _homeState extends State<home> {
                   fontSize: 30.0,
                 ),
               ),
-
             ],
-          ) ,
-          elevation: 0,
-          actions: [IconButton(
-              onPressed: (){
-                // notification page
-              },
-              icon: Stack(
-                alignment: Alignment.topRight,
-                children: [
-                  Icon(
-                    Icons.notifications_on_outlined,
-                    size: 30,
-                    color: Colors.grey,
-                  ),
-                  CircleAvatar(
-                    backgroundColor: notification ? Colors.orange:Colors.transparent,
-                    radius: 5,
-                  )
-                ],
-              )
           ),
+          elevation: 0,
+          actions: [
+            IconButton(
+                onPressed: () {
+                  // notification page
+                },
+                icon: Stack(
+                  alignment: Alignment.topRight,
+                  children: [
+                    Icon(
+                      Icons.notifications_on_outlined,
+                      size: 30,
+                      color: Colors.grey,
+                    ),
+                    CircleAvatar(
+                      backgroundColor:
+                          notification ? Colors.orange : Colors.transparent,
+                      radius: 5,
+                    )
+                  ],
+                )),
             SizedBox(
               width: 20.0,
             ),
@@ -113,13 +148,11 @@ class _homeState extends State<home> {
               alignment: Alignment.center,
               children: [
                 CircleAvatar(
-                  backgroundColor:online ,
+                  backgroundColor: online,
                   radius: 22.0,
                 ),
                 CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      '$Image_url'
-                  ),
+                  backgroundImage: NetworkImage('$Image_url'),
                   radius: 20.0,
                 ),
               ],
@@ -127,51 +160,42 @@ class _homeState extends State<home> {
             SizedBox(
               width: 20.0,
             ),
-          ]
-      ),
-
+          ]),
       body: Container(
         color: Colors.white,
         child: pages.elementAt(current_index),
       ),
-
-      bottomNavigationBar:Container(
-        margin: EdgeInsetsDirectional.all(screenWidth1*0.03),
-        height: screenWidth1*0.2,
+      bottomNavigationBar: Container(
+        margin: EdgeInsetsDirectional.all(screenWidth1 * 0.03),
+        height: screenWidth1 * 0.2,
         decoration: BoxDecoration(
-
             color: Colors.black,
-            borderRadius: BorderRadius.circular(screenWidth1*0.1)
-        ),
+            borderRadius: BorderRadius.circular(screenWidth1 * 0.1)),
         child: ListView.builder(
             padding: EdgeInsets.symmetric(horizontal: screenWidth1 * .02),
             scrollDirection: Axis.horizontal,
             itemCount: 5,
-            itemBuilder: (context,index)=>navBar(index, screenWidth1)
-        ),
+            itemBuilder: (context, index) => navBar(index, screenWidth1)),
       ),
     );
-
   }
-  Widget product( products p)
-  {
-    return GestureDetector(
-      onTap: (){
 
-      },
+  Widget product(products p) {
+    return GestureDetector(
+      onTap: () {},
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30.0),
           color: Colors.black,
         ),
-        height: screenWidth*0.6,
+        height: screenWidth * 0.6,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(30.0),
           child: Stack(
             alignment: Alignment.topCenter,
             children: [
               Container(
-                height: screenWidth*0.6,
+                height: screenWidth * 0.6,
                 child: Image.network(
                   '${p.product_img}',
                   fit: BoxFit.cover,
@@ -182,7 +206,7 @@ class _homeState extends State<home> {
                 style: TextStyle(
                   fontFamily: 'Sweety',
                   color: Colors.white54,
-                  fontSize:25.0,
+                  fontSize: 25.0,
                 ),
               ),
               Column(
@@ -194,7 +218,7 @@ class _homeState extends State<home> {
                     style: TextStyle(
                       fontFamily: 'Arial',
                       color: Colors.white,
-                      fontSize:30.0,
+                      fontSize: 30.0,
                     ),
                   ),
                   RatingBar.builder(
@@ -213,19 +237,23 @@ class _homeState extends State<home> {
                       print(rating);
                     },
                   ),
-                  SizedBox(height: 5.0,),
+                  SizedBox(
+                    height: 5.0,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      IconButton(onPressed: (){
-                        setState(() {
-                          p.cart=!p.cart;
-                          p.cart?cart.add(p):cart.remove(p);
-                        });
-                      },
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            p.cart = !p.cart;
+                            p.cart ? cart.add(p) : cart.remove(p);
+                          });
+                        },
                         icon: Icon(
                           Icons.shopping_cart_sharp,
-                          color: p.cart? Colors.lightBlueAccent:Colors.white70,
+                          color:
+                              p.cart ? Colors.lightBlueAccent : Colors.white70,
                           size: 30.0,
                         ),
                       ),
@@ -238,15 +266,17 @@ class _homeState extends State<home> {
                         ),
                       ),
                       IconButton(
-                        onPressed: (){
+                        onPressed: () {
                           setState(() {
-                            p.fav=!p.fav;
-                            p.fav?fav.add(p):fav.remove(p);
+                            p.fav = !p.fav;
+                            p.fav ? fav.add(p) : fav.remove(p);
                           });
                         },
                         icon: Icon(
                           Icons.favorite,
-                          color: p.fav? Color.fromRGBO(255, 33, 131, 1.0):Colors.white70,
+                          color: p.fav
+                              ? Color.fromRGBO(255, 33, 131, 1.0)
+                              : Colors.white70,
                           size: 30.0,
                         ),
                       ),
@@ -260,8 +290,8 @@ class _homeState extends State<home> {
       ),
     );
   }
-  Widget home_page( screenWidth,Slidshow,home_products)
-  {
+
+  Widget home_page(screenWidth, Slidshow, home_products) {
     return Padding(
       padding: EdgeInsetsDirectional.all(20.0),
       child: SingleChildScrollView(
@@ -272,7 +302,7 @@ class _homeState extends State<home> {
               padding: const EdgeInsetsDirectional.only(
                 bottom: 20.0,
               ),
-              child:Container(
+              child: Container(
                 height: 50.0,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30.0),
@@ -286,13 +316,11 @@ class _homeState extends State<home> {
                           borderRadius: BorderRadius.circular(30.0),
                           borderSide: BorderSide(
                             color: Colors.transparent,
-                          )
-                      ),
+                          )),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Colors.white12,
-                          )
-                      ),
+                        color: Colors.white12,
+                      )),
                       prefixIcon: Icon(
                         FontAwesomeIcons.search,
                         color: Colors.grey,
@@ -306,26 +334,24 @@ class _homeState extends State<home> {
                   ),
                 ),
               ),
-            ),//search bar
+            ), //search bar
             Padding(
                 padding: EdgeInsetsDirectional.only(
                   bottom: 20.0,
                 ),
                 child: Container(
-                  height: screenWidth*0.6,
+                  height: screenWidth * 0.6,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(screenWidth*0.2),
-
+                    borderRadius: BorderRadius.circular(screenWidth * 0.2),
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(screenWidth*0.2),
+                    borderRadius: BorderRadius.circular(screenWidth * 0.2),
                     child: ImageSlideshow(
                       children: Slidshow,
                       autoPlayInterval: 4000,
                     ),
                   ),
-                )
-            ), // slider
+                )), // slider
             Padding(
               padding: const EdgeInsetsDirectional.only(bottom: 20.0),
               child: Row(
@@ -334,13 +360,14 @@ class _homeState extends State<home> {
                     child: Container(
                       height: 40.0,
                       decoration: BoxDecoration(
-                        color: ispressed? pressed:Colors.grey.withOpacity(0.2),
+                        color:
+                            ispressed ? pressed : Colors.grey.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: MaterialButton(
-                        onPressed:(){
+                        onPressed: () {
                           setState(() {
-                            ispressed=true;
+                            ispressed = true;
                           });
                         },
                         child: const Text(
@@ -348,24 +375,26 @@ class _homeState extends State<home> {
                           style: TextStyle(
                               fontSize: 20.0,
                               color: Colors.white,
-                              fontFamily: 'Amperzand'
-                          ),
+                              fontFamily: 'Amperzand'),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 20.0,),
+                  const SizedBox(
+                    width: 20.0,
+                  ),
                   Expanded(
                     child: Container(
                       height: 40.0,
                       decoration: BoxDecoration(
-                        color: !ispressed? pressed:Colors.grey.withOpacity(0.2),
+                        color:
+                            !ispressed ? pressed : Colors.grey.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: MaterialButton(
-                        onPressed:(){
+                        onPressed: () {
                           setState(() {
-                            ispressed=false;
+                            ispressed = false;
                           });
                         },
                         child: const Text(
@@ -373,8 +402,7 @@ class _homeState extends State<home> {
                           style: TextStyle(
                               fontSize: 20.0,
                               color: Colors.white,
-                              fontFamily: 'Amperzand'
-                          ),
+                              fontFamily: 'Amperzand'),
                         ),
                       ),
                     ),
@@ -383,21 +411,21 @@ class _homeState extends State<home> {
               ),
             ), //buttons
             ListView.separated(
-              itemBuilder: (context,index)=>product(home_products[index]),
-              separatorBuilder: (context,index)=>const SizedBox(
+              itemBuilder: (context, index) => product(home_products[index]),
+              separatorBuilder: (context, index) => const SizedBox(
                 height: 20.0,
               ),
               itemCount: home_products.length,
               physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,),
+              shrinkWrap: true,
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget fav_page(screenWidth,home_products)
-  {
+  Widget fav_page(screenWidth, home_products) {
     return Padding(
       padding: EdgeInsetsDirectional.all(20.0),
       child: SingleChildScrollView(
@@ -405,21 +433,21 @@ class _homeState extends State<home> {
         child: Column(
           children: [
             ListView.separated(
-              itemBuilder: (context,index1)=>product(fav[index1]),
-              separatorBuilder: (context,index)=>const SizedBox(
+              itemBuilder: (context, index1) => product(fav[index1]),
+              separatorBuilder: (context, index) => const SizedBox(
                 height: 20.0,
               ),
               itemCount: fav.length,
               physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,),
+              shrinkWrap: true,
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget cart_page(screenWidth,home_products)
-  {
+  Widget cart_page(screenWidth, home_products) {
     return Padding(
       padding: EdgeInsetsDirectional.all(20.0),
       child: SingleChildScrollView(
@@ -427,24 +455,26 @@ class _homeState extends State<home> {
         child: Column(
           children: [
             ListView.separated(
-              itemBuilder: (context,index1)=>Cart_product(cart[index1],index1),
-              separatorBuilder: (context,index)=>const SizedBox(
+              itemBuilder: (context, index1) =>
+                  Cart_product(cart[index1], index1),
+              separatorBuilder: (context, index) => const SizedBox(
                 height: 20.0,
               ),
               itemCount: cart.length,
               physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,),
+              shrinkWrap: true,
+            ),
           ],
         ),
       ),
     );
   }
-  Widget navBar(index,screenWidth)
-  {
+
+  Widget navBar(index, screenWidth) {
     return InkWell(
-      onTap: (){
+      onTap: () {
         setState(() {
-          current_index=index;
+          current_index = index;
         });
       },
       splashColor: Colors.transparent,
@@ -454,11 +484,10 @@ class _homeState extends State<home> {
           AnimatedContainer(
             duration: Duration(seconds: 1),
             curve: Curves.fastLinearToSlowEaseIn,
-            width: index == current_index
-                ? screenWidth * .25
-                : screenWidth * .05,
+            width:
+                index == current_index ? screenWidth * .25 : screenWidth * .05,
             alignment: Alignment.center,
-            child:  AnimatedContainer(
+            child: AnimatedContainer(
               duration: Duration(seconds: 1),
               curve: Curves.fastLinearToSlowEaseIn,
               height: index == current_index ? screenWidth * .2 : 0,
@@ -467,17 +496,15 @@ class _homeState extends State<home> {
                 color: index == current_index
                     ? Colors.teal.withOpacity(0.2)
                     : Colors.transparent,
-                borderRadius: BorderRadius.circular(screenWidth*0.1),
+                borderRadius: BorderRadius.circular(screenWidth * 0.1),
               ),
             ),
-
           ),
           AnimatedContainer(
             duration: Duration(seconds: 1),
             curve: Curves.fastLinearToSlowEaseIn,
-            width: index == current_index
-                ? screenWidth * .31
-                : screenWidth * .15,
+            width:
+                index == current_index ? screenWidth * .31 : screenWidth * .15,
             alignment: Alignment.center,
             child: Stack(
               children: [
@@ -486,23 +513,19 @@ class _homeState extends State<home> {
                     AnimatedContainer(
                       duration: Duration(seconds: 1),
                       curve: Curves.fastLinearToSlowEaseIn,
-                      width:
-                      index == current_index  ? screenWidth * .13 : 0,
+                      width: index == current_index ? screenWidth * .13 : 0,
                     ),
                     AnimatedOpacity(
-                      opacity: index == current_index  ? 1 : 0,
+                      opacity: index == current_index ? 1 : 0,
                       duration: Duration(seconds: 1),
                       curve: Curves.fastLinearToSlowEaseIn,
                       child: Text(
-                        index == current_index
-                            ? '${listOfStrings[index]}'
-                            : '',
+                        index == current_index ? '${listOfStrings[index]}' : '',
                         style: TextStyle(
                             color: Colors.blueAccent,
                             fontWeight: FontWeight.w600,
-                            fontSize: screenWidth*0.03,
-                            fontFamily: 'Amperzand'
-                        ),
+                            fontSize: screenWidth * 0.03,
+                            fontFamily: 'Amperzand'),
                       ),
                     ),
                   ],
@@ -512,8 +535,7 @@ class _homeState extends State<home> {
                     AnimatedContainer(
                       duration: Duration(seconds: 1),
                       curve: Curves.fastLinearToSlowEaseIn,
-                      width:
-                      index == current_index ? screenWidth * .03 : 20,
+                      width: index == current_index ? screenWidth * .03 : 20,
                     ),
                     Icon(
                       listOfIcons[index],
@@ -531,19 +553,18 @@ class _homeState extends State<home> {
       ),
     );
   }
-  Widget Cart_product( products p,index)
-  {
-    return GestureDetector(
-      onTap: (){
 
-      },
+  Widget Cart_product(products p, index) {
+    return GestureDetector(
+      onTap: () {},
       child: Container(
           decoration: BoxDecoration(
-
-            borderRadius: BorderRadius.circular(screenWidth*0.05),
-            color: index%2==0? Colors.black12:Color.fromRGBO(1, 126, 120, 1.0),
+            borderRadius: BorderRadius.circular(screenWidth * 0.05),
+            color: index % 2 == 0
+                ? Colors.black12
+                : Color.fromRGBO(1, 126, 120, 1.0),
           ),
-          height: screenWidth*0.4,
+          height: screenWidth * 0.4,
           child: Stack(
             alignment: Alignment.topRight,
             children: [
@@ -556,21 +577,27 @@ class _homeState extends State<home> {
                       alignment: Alignment.bottomRight,
                       children: [
                         Container(
-                          width: screenWidth*0.4,
+                          width: screenWidth * 0.4,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(screenWidth*0.05),
+                            borderRadius:
+                                BorderRadius.circular(screenWidth * 0.05),
                           ),
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(screenWidth*0.05),
-                            child: Image.network(p.product_img,fit: BoxFit.cover,),
+                            borderRadius:
+                                BorderRadius.circular(screenWidth * 0.05),
+                            child: Image.network(
+                              p.product_img,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                         Container(
-                          width: screenWidth*0.13,
-                          height: screenWidth*0.13,
+                          width: screenWidth * 0.13,
+                          height: screenWidth * 0.13,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(topLeft:Radius.circular(screenWidth*0.05),
-                              bottomRight: Radius.circular(screenWidth*0.05),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(screenWidth * 0.05),
+                              bottomRight: Radius.circular(screenWidth * 0.05),
                             ),
                             color: Colors.black,
                           ),
@@ -579,7 +606,7 @@ class _homeState extends State<home> {
                               '${p.product_price} \$ ',
                               style: TextStyle(
                                 fontFamily: 'fastForward',
-                                fontSize: screenWidth*0.02,
+                                fontSize: screenWidth * 0.02,
                                 color: Color.fromRGBO(225, 162, 1, 1.0),
                               ),
                             ),
@@ -587,7 +614,9 @@ class _homeState extends State<home> {
                         )
                       ],
                     ),
-                    SizedBox(width: screenWidth*0.05,),
+                    SizedBox(
+                      width: screenWidth * 0.05,
+                    ),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -596,57 +625,65 @@ class _homeState extends State<home> {
                             '${p.product_name}',
                             style: TextStyle(
                               fontFamily: 'Amperzand',
-                              fontSize: screenWidth*0.07,
+                              fontSize: screenWidth * 0.07,
                               fontWeight: FontWeight.w200,
-                              color: index%2==0?Colors.black:Colors.white,
+                              color:
+                                  index % 2 == 0 ? Colors.black : Colors.white,
                             ),
                           ),
                           Text(
                             '${p.amount}',
                             style: TextStyle(
-                                fontSize: screenWidth*0.05,
+                                fontSize: screenWidth * 0.05,
                                 fontWeight: FontWeight.w100,
                                 fontFamily: 'Sweety',
-                                color:Colors.grey
-                            ),
+                                color: Colors.grey),
                           ),
                           SizedBox(
-                            height: screenWidth*0.01,
+                            height: screenWidth * 0.01,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               GestureDetector(
-                                onTap: (){
+                                onTap: () {
                                   setState(() {
                                     p.amount++;
                                   });
                                 },
                                 child: Container(
-                                  width: screenWidth*0.1,
-                                  height: screenWidth*0.1,
+                                  width: screenWidth * 0.1,
+                                  height: screenWidth * 0.1,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: Colors.black,
                                   ),
-                                  child: Icon(Icons.add,color: Colors.white,),
+                                  child: Icon(
+                                    Icons.add,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
-                              SizedBox(width: screenWidth*0.015,),
+                              SizedBox(
+                                width: screenWidth * 0.015,
+                              ),
                               GestureDetector(
-                                onTap: (){
+                                onTap: () {
                                   setState(() {
-                                    p.amount >1?p.amount--:p.amount;
+                                    p.amount > 1 ? p.amount-- : p.amount;
                                   });
                                 },
                                 child: Container(
-                                  width: screenWidth*0.1,
-                                  height: screenWidth*0.1,
+                                  width: screenWidth * 0.1,
+                                  height: screenWidth * 0.1,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: Colors.black,
                                   ),
-                                  child: Icon(Icons.remove,color: Colors.white,),
+                                  child: Icon(
+                                    Icons.remove,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ],
@@ -654,39 +691,40 @@ class _homeState extends State<home> {
                         ],
                       ),
                     ),
-                    SizedBox(width: screenWidth*0.05,),
+                    SizedBox(
+                      width: screenWidth * 0.05,
+                    ),
                   ],
                 ),
               ),
               Container(
-                width: screenWidth*0.13,
-                height: screenWidth*0.13,
+                width: screenWidth * 0.13,
+                height: screenWidth * 0.13,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(topRight:Radius.circular(screenWidth*0.05),
-                    bottomLeft: Radius.circular(screenWidth*0.05),
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(screenWidth * 0.05),
+                    bottomLeft: Radius.circular(screenWidth * 0.05),
                   ),
                   color: Colors.grey.withOpacity(0.5),
                 ),
                 child: Center(
-                  child: IconButton(onPressed: (){
-                    setState(() {
-                      p.cart=!p.cart;
-                      if(!p.cart)
-                        cart.remove(p);
-                    });
-                  },
+                  child: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        p.cart = !p.cart;
+                        if (!p.cart) cart.remove(p);
+                      });
+                    },
                     icon: Icon(
                       Icons.shopping_cart_sharp,
-                      color: p.cart? Colors.lightBlueAccent:Colors.white70,
-                      size: screenWidth*0.06,
+                      color: p.cart ? Colors.lightBlueAccent : Colors.white70,
+                      size: screenWidth * 0.06,
                     ),
                   ),
                 ),
               ),
             ],
-          )
-      ),
+          )),
     );
   }
 }
-

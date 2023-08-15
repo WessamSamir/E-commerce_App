@@ -20,7 +20,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.18.5 <3.0.0'
+  sdk: '>=3.0.6 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -36,6 +36,7 @@ dependencies:
   firebase_core: ^2.15.0
   firebase_auth: ^4.7.2
   cloud_firestore: ^4.8.4
+  fluttertoast: ^8.2.2
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -72,29 +73,33 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
+  # To add Assets to your application, add an Assets section, like this:
   assets:
-    - assets/images/
+    - Assets/images/
+    - Assets/images/online_shopping.png
+    - Assets/images/Sale Promotion Digital Display HD - Made with PosterMyWall.gif
+    - Assets/images/Huge Sale Twitter Share Post Template - Made with PosterMyWall (2).gif
+    - Assets/images/Sale Discount Poster Banner - Made with PosterMyWall.gif
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
-  # For details regarding adding assets from package dependencies, see
+  # For details regarding adding Assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
 
   fonts:
     - family: Sweety
       fonts:
-        - asset: assets/fonts/Sweety Rasty.otf
+        - asset: Assets/fonts/Sweety Rasty.otf
     #       - asset: fonts/Schyler-Italic.ttf
     #         style: italic
     - family: Amperzand
       fonts:
-        - asset: assets/fonts/Amperzand.ttf
+        - asset: Assets/fonts/Amperzand.ttf
     - family: fastForward
       fonts:
-        - asset: assets/fonts/Fast Forward.ttf
+        - asset: Assets/fonts/Fast Forward.ttf
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a

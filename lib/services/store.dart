@@ -1,10 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_demo/models/Users.dart';
 
 import '../models/products.dart';
 
 class Store {
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  addUser(Users user)
+  {
+    _firestore.collection("users").add(
+        {
+          'name' : user.name,
+          'phone' : user.phone,
+          'email' : user.email,
+          'password' : user.password
+        }
+    );
+  }
 
   Future<List<products>?> loadProducts() async
   {

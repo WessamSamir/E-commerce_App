@@ -26,7 +26,7 @@ class _WelcomeScreen extends State<WelcomeScreen> {
                 // Text(
                 //     'App Name'
                 // ),
-                Image.asset('assets/images/online_shopping.png'),
+                Image.asset('Assets/images/online_shopping.png'),
                 Text(
                   'Welcome to our application...',
                   style: TextStyle(
