@@ -35,6 +35,7 @@ dependencies:
 
   firebase_core: ^2.15.0
   firebase_auth: ^4.7.2
+  cloud_firestore: ^4.8.4
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -45,6 +46,13 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  font_awesome_flutter: ^9.2.0
+  flutter_rating_bar: ^4.0.1
+  flutter_image_slideshow: ^0.1.0
+  cached_network_image: ^3.2.3
+  fluid_bottom_nav_bar: ^1.4.0
+  material_design_icons_flutter: ^7.0.7296
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -66,7 +74,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - images/
+    - assets/images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -74,6 +82,19 @@ flutter:
 
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
+
+  fonts:
+    - family: Sweety
+      fonts:
+        - asset: assets/fonts/Sweety Rasty.otf
+    #       - asset: fonts/Schyler-Italic.ttf
+    #         style: italic
+    - family: Amperzand
+      fonts:
+        - asset: assets/fonts/Amperzand.ttf
+    - family: fastForward
+      fonts:
+        - asset: assets/fonts/Fast Forward.ttf
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a

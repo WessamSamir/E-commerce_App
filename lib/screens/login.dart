@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/constants.dart';
+import 'package:flutter_demo/screens/home.dart';
 import 'package:flutter_demo/screens/sign_up.dart';
 
 import '../services/auth.dart';
@@ -15,7 +16,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   bool value = false;
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
-  late String email = '', password = '';
+  String email = '', password = '';
   final _auth = Auth();
   @override
   Widget build(BuildContext context) {
@@ -74,28 +75,49 @@ class _LoginState extends State<Login> {
                   Container(
                     width: currentWidth * 0.6,
                     height: currentHeight * 0.06,
-                    child: ElevatedButton(
-                      onPressed: () async
-                      {
-                        if(_globalKey.currentState!.validate())
-                        {
-                          _globalKey.currentState?.save();
-                          final authResult = await _auth.SignIn(email, password);
-                        }
-                      },
-                      child: const Text(
-                        'Login',
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll<Color>(KMainColor),
-                          shape:
-                          MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(24.0),
-                                  side: const BorderSide(color: Colors.white)))),
+                    child: Builder(
+                      builder: (context) {
+                        return ElevatedButton(
+                          onPressed: () async
+                          {
+                            if(_globalKey.currentState!.validate())
+                            {
+                              try {
+                                _globalKey.currentState?.save();
+                                final authResult = await _auth.SignIn(
+                                    email, password);
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const home()));
+
+                              }catch(e){
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    backgroundColor: KMainColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                                    ),
+                                    content: Text(
+                                      e.toString(),
+                                    ),
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStatePropertyAll<Color>(KMainColor),
+                              shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(24.0),
+                                      side: const BorderSide(color: Colors.white)))),
+                        );
+                      }
                     ),
                   ),
                   const SizedBox(
