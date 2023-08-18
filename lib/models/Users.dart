@@ -1,12 +1,11 @@
-import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Users {
-  final String? name;
-  final String? phone;
-  final String? email;
-  final String? password;
+   String? name;
+   String? phone;
+   String? email;
+   String? password;
 
   Users(
       {required this.name,

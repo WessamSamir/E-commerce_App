@@ -1,7 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_demo/screens/Initial_page.dart';
+import 'package:flutter_demo/screens/home.dart';
 import 'package:flutter_demo/screens/login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/screens/profile.dart';
+import 'package:flutter_demo/services/fireStore.dart';
 import '../constants.dart';
+import '../models/Personal_info.dart';
 import '../models/Users.dart';
 import '../widgets/CustemTextFormField.dart';
 import 'package:flutter_demo/services/auth.dart';
@@ -20,6 +26,40 @@ class _SignUpState extends State<SignUp> {
   String? _email, _password, _confirmPass, _name, _phone;
   final _auth = Auth();
   final _store = Store();
+  // Person_info person=Person_info("Loay Mohamed", "01121510042", "looay432@gmail.com","2001369105694");
+  // // late Person_info person;
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPpasswordController = TextEditingController();
+
+  void _signUp(BuildContext context) {
+    String name = _nameController.text;
+    String email = _emailController.text;
+    String phone = _phoneController.text;
+    String password = _passwordController.text;
+
+    // Get other sign-up field values as needed
+
+    FirebaseFirestore.instance.collection('users').add({
+      'name': name,
+      'email': email,
+      'phone' : phone,
+      'password': password,
+      // Add other sign-up field values to be stored in Firestore as needed
+    }).then((value) {
+      // Navigate to the profile screen after successful sign-up
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => InitialPage(userId: value.id)),
+      // );
+    }).catchError((error) {
+      // Handle sign-up error
+      print('Error signing up: $error');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentWidth = MediaQuery.of(context).size.width;
@@ -60,7 +100,7 @@ class _SignUpState extends State<SignUp> {
                     icon: Icons.person,
                     onClick: (value) {
                       _name = value!;
-                    },
+                    }, controller: _nameController,
                   ),
                   SizedBox(
                     height: 10,
@@ -71,7 +111,7 @@ class _SignUpState extends State<SignUp> {
                     inputType: TextInputType.phone,
                     onClick: (value) {
                       _phone = value!;
-                    },
+                    }, controller: _phoneController,
                   ),
                   SizedBox(
                     height: 10,
@@ -82,7 +122,7 @@ class _SignUpState extends State<SignUp> {
                     inputType: TextInputType.emailAddress,
                     onClick: (value) {
                       _email = value!;
-                    },
+                    }, controller: _emailController,
                   ),
                   SizedBox(
                     height: 10,
@@ -93,7 +133,7 @@ class _SignUpState extends State<SignUp> {
                     secure: true,
                     onClick: (value) {
                       _password = value!;
-                    },
+                    }, controller: _passwordController,
                   ),
                   SizedBox(
                     height: 10,
@@ -104,7 +144,7 @@ class _SignUpState extends State<SignUp> {
                     secure: true,
                     onClick: (value) {
                       _confirmPass = value!;
-                    },
+                    }, controller: _confirmPpasswordController,
                   ),
                   SizedBox(
                     height: 30,
@@ -117,8 +157,10 @@ class _SignUpState extends State<SignUp> {
                         onPressed: () async {
                           if (_globalKey.currentState!.validate()) {
                             if (_password == _confirmPass) {
+                              print("on buttun");
                               try {
                                 _globalKey.currentState!.save();
+
                                 final authResult =
                                     await _auth.SignUp(_email!, _password!);
                                 Fluttertoast.showToast(
@@ -129,11 +171,13 @@ class _SignUpState extends State<SignUp> {
                                     backgroundColor: KMainColor,
                                     textColor: Colors.white,
                                     fontSize: 16.0);
-                                _store.addUser(Users(
-                                    name: _name,
-                                    phone: _phone,
-                                    email: _email,
-                                    password: _password));
+                                _signUp(context);
+                                // _store.addUser(Users(
+                                //     name: _name,
+                                //     phone: _phone,
+                                //     email: _email,
+                                //     password: _password));
+                                // Navigator.of(context).push(MaterialPageRoute(builder: (context) => Profile(userId: userId)));
                               } catch (e) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(

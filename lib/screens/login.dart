@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/constants.dart';
+import 'package:flutter_demo/screens/Initial_page.dart';
 import 'package:flutter_demo/screens/home.dart';
 import 'package:flutter_demo/screens/sign_up.dart';
 
@@ -14,10 +16,65 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   bool value = false;
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   String email = '', password = '';
   final _auth = Auth();
+
+  Future<void> _login(BuildContext context) async {
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    if (_globalKey.currentState!.validate()) {
+      try {
+        _globalKey.currentState?.save();
+        final authResult = await _auth.SignIn(
+            email, password);
+        // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const home()));
+
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: KMainColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+            ),
+            content: Text(
+              e.toString(),
+            ),
+          ),
+        );
+      }
+    }
+
+    // After successful login, retrieve user profile data from Firestore
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .limit(1)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) {
+        DocumentSnapshot snapshot = querySnapshot.docs.first;
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => InitialPage(snapshot: snapshot),
+          ),
+        );
+      } else {
+        // Handle user not found or other login error
+        print('User not found');
+      }
+    }).catchError((error) {
+      // Handle login error
+      print('Error logging in: $error');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentHeight = MediaQuery.of(context).size.height;
@@ -55,7 +112,7 @@ class _LoginState extends State<Login> {
                     onClick: (value)
                     {
                       email = value!;
-                    },
+                    }, controller: _emailController,
                   ),
                   const SizedBox(
                     height: 30,
@@ -67,7 +124,7 @@ class _LoginState extends State<Login> {
                     onClick: (value)
                     {
                       password = value!;
-                    },
+                    }, controller: _passwordController,
                   ),
                   const SizedBox(
                     height: 30,
@@ -80,28 +137,29 @@ class _LoginState extends State<Login> {
                         return ElevatedButton(
                           onPressed: () async
                           {
-                            if(_globalKey.currentState!.validate())
-                            {
-                              try {
-                                _globalKey.currentState?.save();
-                                final authResult = await _auth.SignIn(
-                                    email, password);
-                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const home()));
-
-                              }catch(e){
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    backgroundColor: KMainColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-                                    ),
-                                    content: Text(
-                                      e.toString(),
-                                    ),
-                                  ),
-                                );
-                              }
-                            }
+                            _login(context);
+                            // if(_globalKey.currentState!.validate())
+                            // {
+                            //   try {
+                            //     _globalKey.currentState?.save();
+                            //     final authResult = await _auth.SignIn(
+                            //         email, password);
+                            //     Navigator.of(context).push(MaterialPageRoute(builder: (context) => const home()));
+                            //
+                            //   }catch(e){
+                            //     ScaffoldMessenger.of(context).showSnackBar(
+                            //       SnackBar(
+                            //         backgroundColor: KMainColor,
+                            //         shape: RoundedRectangleBorder(
+                            //           borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                            //         ),
+                            //         content: Text(
+                            //           e.toString(),
+                            //         ),
+                            //       ),
+                            //     );
+                            //   }
+                            // }
                           },
                           child: const Text(
                             'Login',
@@ -156,4 +214,5 @@ class _LoginState extends State<Login> {
     );
   }
 }
+
 

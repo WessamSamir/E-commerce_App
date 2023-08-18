@@ -54,6 +54,7 @@ dev_dependencies:
   cached_network_image: ^3.2.3
   fluid_bottom_nav_bar: ^1.4.0
   material_design_icons_flutter: ^7.0.7296
+  image_picker: ^0.8.4+2
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -80,6 +81,11 @@ flutter:
     - Assets/images/Sale Promotion Digital Display HD - Made with PosterMyWall.gif
     - Assets/images/Huge Sale Twitter Share Post Template - Made with PosterMyWall (2).gif
     - Assets/images/Sale Discount Poster Banner - Made with PosterMyWall.gif
+    - Assets/images/image_processing20210910-22853-1777qya.gif
+    - Assets/images/image_processing20200825-24260-1l1hr8o.gif
+    - Assets/images/camera.png
+    - Assets/images/wallpaper.png
+    - Assets/images/camera (1).png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

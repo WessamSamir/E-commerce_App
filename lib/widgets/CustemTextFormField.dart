@@ -7,6 +7,7 @@ class CustomTextFormField extends StatelessWidget {
   final bool secure;
   final void Function(String?)? onClick;
   final TextInputType inputType;
+  final TextEditingController controller;
   const CustomTextFormField({
     Key? key,
     required this.hint,
@@ -14,6 +15,7 @@ class CustomTextFormField extends StatelessWidget {
     this.secure = false,
     this.inputType = TextInputType.text,
     required this.onClick,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -25,6 +27,7 @@ class CustomTextFormField extends StatelessWidget {
       //   }
       //   return '';
       // },
+      controller: controller,
       onSaved: onClick,
       keyboardType: inputType,
       obscureText: secure,
