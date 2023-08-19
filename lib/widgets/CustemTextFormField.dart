@@ -21,12 +21,6 @@ class CustomTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      // validator: (value) {
-      //   if (value!.isEmpty) {
-      //     return 'value is empty';
-      //   }
-      //   return '';
-      // },
       controller: controller,
       onSaved: onClick,
       keyboardType: inputType,

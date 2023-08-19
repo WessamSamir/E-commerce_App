@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/screens/Initial_page.dart';
-import 'package:flutter_demo/screens/home.dart';
 import 'package:flutter_demo/screens/sign_up.dart';
 
 import '../services/auth.dart';

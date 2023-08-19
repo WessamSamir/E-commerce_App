@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../Widgets/Category_products.dart';
+import 'package:flutter_demo/screens/Category_products.dart';
 import '../models/Category.dart';
 import '../models/Personal_info.dart';
 import '../models/products.dart';
@@ -18,9 +18,9 @@ class _Category_pageState extends State<Category_page> {
   double screenWidth=0;
   List<Catego> cat=[
     Catego("Food", "Assets/images/food category.jpg"),
-    Catego("Cloth", "Assets/images/clothes.jpg"),
+    Catego("Fashion", "Assets/images/clothes.jpg"),
     Catego("Mobiles", "Assets/images/Moblie category.jpg"),
-    Catego("LapTop", "Assets/images/laptop.jpg"),
+    Catego("Electronics", "Assets/images/laptop.jpg"),
     Catego("Books", "Assets/images/book.jpg"),
   ];
 
@@ -35,7 +35,10 @@ class _Category_pageState extends State<Category_page> {
         child: Column(
           children: [
             ListView.separated(
-              itemBuilder: (context,index1)=>category(cat[index1],index1),
+              itemBuilder: (context, index){
+                Catego c = cat[index];
+                return category(c);
+              },
               separatorBuilder: (context,index)=>const SizedBox(
                 height: 20.0,
               ),
@@ -47,11 +50,12 @@ class _Category_pageState extends State<Category_page> {
       ),
     );
   }
-  Widget category(Catego C,index)
+  Widget category(Catego c)
   {
     return InkWell(
       onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>category_product(widget.Categories[index],widget.user,C.name)));
+        // Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProductsPage()));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>category_product(widget.user,c.name)));
       },
       child: Container(
         height: screenWidth*0.6,
@@ -63,12 +67,12 @@ class _Category_pageState extends State<Category_page> {
           children: [
             ClipRRect(
                 borderRadius: BorderRadius.circular(screenWidth*0.1),
-                child: Image.asset(C.pic,fit: BoxFit.cover,)
+                child: Image.asset(c.pic,fit: BoxFit.cover,)
             ),
             Container(
               height: screenWidth*0.2,
               child: Text(
-                '${C.name}',
+                '${c.name}',
                 style: TextStyle(
                     fontFamily: "Sweety",
                     fontSize: screenWidth*0.09,

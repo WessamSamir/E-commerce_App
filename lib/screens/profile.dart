@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -34,7 +33,6 @@ class _Profile_pageState extends State<Profile_page> {
     phone = TextEditingController(text: widget.snapshot['phone']);
     email = TextEditingController(text: widget.snapshot['email']);
     password = TextEditingController(text: widget.snapshot['password']);
-
   }
 
   void _updateProfile() {
@@ -51,10 +49,9 @@ class _Profile_pageState extends State<Profile_page> {
       'phone': newPhone,
       'email': newEmail,
       'password': newPassword,
-
     }).then((_) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Profile updated successfully')),
+        const SnackBar(content: Text('Profile updated successfully')),
       );
     }).catchError((error) {
       print('Error updating profile: $error');
@@ -71,8 +68,10 @@ class _Profile_pageState extends State<Profile_page> {
               .collection('users')
               .doc(widget.snapshot.id)
               .get(),
-          builder:
-              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            }
             if (snapshot.hasError) {
               return const Text('Error retrieving profile data');
             }
@@ -198,7 +197,7 @@ class _Profile_pageState extends State<Profile_page> {
                                 borderRadius:
                                     BorderRadius.circular(screenWidth * 0.05),
                               ),
-                              hintText: data["name"],
+                              hintText: data['name'],
                               hintStyle: TextStyle(
                                 overflow: TextOverflow.fade,
                                 fontFamily: 'Amperzand',
@@ -414,7 +413,7 @@ class _Profile_pageState extends State<Profile_page> {
           return Dialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
-            child: Container(
+            child: SizedBox(
                 height: screenWidth * 0.7,
                 child: Padding(
                   padding: const EdgeInsetsDirectional.all(20.0),
@@ -445,7 +444,7 @@ class _Profile_pageState extends State<Profile_page> {
                                     setState(() {});
                                   }
                                 },
-                                child: Container(
+                                child: SizedBox(
                                     width: screenWidth * 0.2,
                                     height: screenWidth * 0.2,
                                     child: Image.asset(
@@ -475,7 +474,7 @@ class _Profile_pageState extends State<Profile_page> {
                                     setState(() {});
                                   }
                                 },
-                                child: Container(
+                                child: SizedBox(
                                     width: screenWidth * 0.2,
                                     height: screenWidth * 0.2,
                                     child: Image.asset(
@@ -506,18 +505,20 @@ class _Profile_pageState extends State<Profile_page> {
   wallpaper() async {
     XFile? imageFile = await ImagePicker()
         .pickImage(source: ImageSource.gallery, imageQuality: 10);
-    if (imageFile != null)
+    if (imageFile != null) {
       return imageFile.path;
-    else
+    } else {
       return '';
+    }
   }
 
   camera() async {
     XFile? imageFile = await ImagePicker()
         .pickImage(source: ImageSource.camera, imageQuality: 10);
-    if (imageFile != null)
+    if (imageFile != null) {
       return imageFile.path;
-    else
+    } else {
       return '';
+    }
   }
 }

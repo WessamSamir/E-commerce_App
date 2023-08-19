@@ -292,31 +292,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                       ],
                     ),
                   ),
-                  Container(
-                    width: 350,
-                    child: const ExpansionTile(
-                      title: Text(
-                        "Returned Policy",
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                        ),
-                      ),
-                      children: [
-                        Text(
-                          //widget.product.policy,
-                          "Returned Policy here",
-                          style: TextStyle(
-                              height: 1.5,
-                              wordSpacing: 5,
-                              color: Colors.black54,
-                              fontSize: 20,
-                              fontFamily: "Amperzand"),
-
-                        ),
-                      ],
-                    ),
-                  ),
                   Divider(
                     color: Colors.grey.shade300,
                     thickness: 1,

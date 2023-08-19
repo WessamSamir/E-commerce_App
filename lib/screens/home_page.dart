@@ -5,10 +5,12 @@ import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import '../models/Personal_info.dart';
 import '../models/products.dart';
 import '../widgets/Product_widget.dart';
+
 class Home_page extends StatefulWidget {
   final Person_info user;
-  List<products> home_products;
-  Home_page(this.user,this.home_products);
+  final List<products> Top_saling;
+  final List<products> for_you;
+  Home_page(this.user,this.Top_saling,this.for_you);
 
   @override
   State<Home_page> createState() => _Home_pageState();
@@ -25,10 +27,11 @@ class _Home_pageState extends State<Home_page> {
     "Assets/images/Huge Sale Twitter Share Post Template - Made with PosterMyWall (2).gif"];
   String Image_url= "https://images.pexels.com/photos/213780/pexels-photo-213780.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500";
   double screenWidth=0;
-  List<products> Top_saling=[];
-  List<products> for_you=[];
+  List<products> home_products=[];
+
   @override
   Widget build(BuildContext context) {
+    home_products=ispressed?widget.Top_saling:home_products;
     final screenWidth1 = MediaQuery.of(context).size.width;
     List<Widget> Slidshow=slideShow.map((url) =>Image.asset(url),).toList();
     screenWidth=screenWidth1;
@@ -112,7 +115,7 @@ class _Home_pageState extends State<Home_page> {
                         onPressed:(){
                           setState(() {
                             ispressed=true;
-                            widget.home_products=Top_saling;
+                            home_products=widget.Top_saling;
                           });
                         },
                         child: const Text(
@@ -138,7 +141,7 @@ class _Home_pageState extends State<Home_page> {
                         onPressed:(){
                           setState(() {
                             ispressed=false;
-                            widget.home_products=for_you;
+                            home_products=widget.for_you;
                           });
                         },
                         child: const Text(
@@ -156,11 +159,11 @@ class _Home_pageState extends State<Home_page> {
               ),
             ), //buttons
             ListView.separated(
-              itemBuilder: (context,index)=>Product_widget(widget.home_products[index],widget.user),
+              itemBuilder: (context,index)=>Product_widget(home_products[index],widget.user),
               separatorBuilder: (context,index)=>const SizedBox(
                 height: 20.0,
               ),
-              itemCount: widget.home_products.length,
+              itemCount: home_products.length,
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,),
           ],
