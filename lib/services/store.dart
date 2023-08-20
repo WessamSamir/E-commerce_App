@@ -2,7 +2,7 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:flutter_demo/models/Users.dart';
 //
-// import '../models/products.dart';
+// import '../models/Products.dart';
 // import 'auth.dart';
 //
 // class Store {

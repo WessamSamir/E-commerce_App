@@ -1,16 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import '../models/Personal_info.dart';
-import '../models/products.dart';
+import '../models/Products.dart';
 import '../widgets/Product_widget.dart';
 
 class Home_page extends StatefulWidget {
-  final Person_info user;
-  final List<products> Top_saling;
-  final List<products> for_you;
-  Home_page(this.user,this.Top_saling,this.for_you);
+  // final Person_info user;
+  final List<Products> Top_saling;
+  final List<Products> for_you;
+  Home_page(this.Top_saling,this.for_you);
 
   @override
   State<Home_page> createState() => _Home_pageState();
@@ -27,7 +28,7 @@ class _Home_pageState extends State<Home_page> {
     "Assets/images/Huge Sale Twitter Share Post Template - Made with PosterMyWall (2).gif"];
   String Image_url= "https://images.pexels.com/photos/213780/pexels-photo-213780.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500";
   double screenWidth=0;
-  List<products> home_products=[];
+  List<Products> home_products=[];
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +36,7 @@ class _Home_pageState extends State<Home_page> {
     final screenWidth1 = MediaQuery.of(context).size.width;
     List<Widget> Slidshow=slideShow.map((url) =>Image.asset(url),).toList();
     screenWidth=screenWidth1;
+
     return Padding(
       padding: EdgeInsetsDirectional.all(20.0),
       child: SingleChildScrollView(
@@ -158,14 +160,14 @@ class _Home_pageState extends State<Home_page> {
                 ],
               ),
             ), //buttons
-            ListView.separated(
-              itemBuilder: (context,index)=>Product_widget(home_products[index],widget.user),
-              separatorBuilder: (context,index)=>const SizedBox(
-                height: 20.0,
-              ),
-              itemCount: home_products.length,
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,),
+            // ListView.separated(
+            //   itemBuilder: (context,index)=>Product_widget(home_products[index],widget.user,u),
+            //   separatorBuilder: (context,index)=>const SizedBox(
+            //     height: 20.0,
+            //   ),
+            //   itemCount: home_products.length,
+            //   physics: NeverScrollableScrollPhysics(),
+            //   shrinkWrap: true,),
           ],
         ),
       ),

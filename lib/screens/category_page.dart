@@ -1,14 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/screens/Category_products.dart';
 import '../models/Category.dart';
 import '../models/Personal_info.dart';
-import '../models/products.dart';
+import '../models/Users.dart';
+import '../models/Products.dart';
 
 class Category_page extends StatefulWidget {
-  final Person_info user;
-  final List<List<products>> Categories;
-  const Category_page(this.user,this.Categories );
+  // final Person_info user;
+  // final Users user;
+  final String userEmail;
+  final List<List<Products>> Categories;
+  const Category_page(this.Categories, this.userEmail);
 
   @override
   State<Category_page> createState() => _Category_pageState();
@@ -55,7 +59,7 @@ class _Category_pageState extends State<Category_page> {
     return InkWell(
       onTap: (){
         // Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProductsPage()));
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>category_product(widget.user,c.name)));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>category_product(widget.userEmail,c.name)));
       },
       child: Container(
         height: screenWidth*0.6,

@@ -1,16 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/models/Users.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../models/Personal_info.dart';
-import '../models/products.dart';
+import '../models/Products.dart';
 import 'Initial_page.dart';
 
 
 
 class ProductDetails extends StatefulWidget {
-  final products product;
-  final Person_info user;
-  const ProductDetails( this.product,this.user );
+  final Products product;
+  final String userEmail;
+  const ProductDetails( this.product,this.userEmail );
 
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
@@ -22,6 +24,66 @@ class _ProductDetailsState extends State<ProductDetails> {
   int counter = 0;
   bool addedToFavorite = false;
   Color favColor = Colors.cyan;
+
+  void _addToCart(Products product) {
+
+    FirebaseFirestore.instance.collection('user_orders').add({
+      'user_email': widget.userEmail,
+      'product_name': product.product_name,
+      'product_price' : product.product_price,
+      'product_img': product.product_img,
+      'quantity' : product.amount,
+    }).catchError((error) {
+      // Handle sign-up error
+      print('Error: $error');
+    });
+  }
+
+  Future<void> _addToUserCart(String userEmail, Products prod) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    QuerySnapshot<Map<String, dynamic>> snapshot = await firestore
+          .collection('users')
+          .where('email', isEqualTo: userEmail)
+          .get();
+
+    DocumentReference documentRef = firestore.collection('users').doc('uycuUOPkDka4UyIQiOQB');
+    documentRef.update({
+      'fav': prod,
+    }).then((value) {
+      print('Field updated successfully');
+    }).catchError((error) {
+      print('Failed to update field: $error');
+    });
+  }
+
+
+  // void _addToUserCart(String userEmail,Products prod) async {
+  //   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  //
+  //   // Check if the user already exists in Firestore
+  //   QuerySnapshot<Map<String, dynamic>> snapshot = await firestore
+  //       .collection('users')
+  //       .where('email', isEqualTo: userEmail)
+  //       .get();
+  //
+  //   firestore.collection('users').add({
+  //     'fav': Products(id: prod.id,product_name: prod.product_name, product_price: prod.product_price,product_img: prod.product_img,category: prod.category,description: prod.description,fav:false),
+  //   }).catchError((error) {
+  //     // Handle error
+  //     print('Error: $error');
+  //   });
+  //
+  //   // If the user doesn't exist, create a new document
+  //   // if (snapshot.docs.isEmpty) {
+  //   //   await firestore.collection('users').add({
+  //   //     'favProducts': product,
+  //   //   });
+  //   //   print('product added successfully!');
+  //   // } else {
+  //   //   print('User already exists!');
+  //   // }
+  // }
 
 
   @override
@@ -244,10 +306,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                     ),
                     child: GestureDetector(
                       onTap: (){
-                        setState(() {
-                          widget.product.fav=!widget.product.fav;
-                          widget.product.fav?widget.user.fav.add(widget.product):widget.user.fav.remove(widget.product);
-                        });
+                        // setState(() {
+                        //   widget.product.fav=!widget.product.fav;
+                        //   widget.product.fav?widget.user.fav.add(widget.product):widget.user.fav.remove(widget.product);
+                        // });
                       },
                       child: Container(
                         child: Icon(
@@ -357,7 +419,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                         onPressed: (){
                           setState(() {
                             widget.product.cart=true;
-                            widget.user.cart.add(widget.product);
+                            // widget.user.cart.add(widget.product);
+                            _addToCart(widget.product);
+                            _addToUserCart(widget.userEmail,widget.product);
                           });
                         },
                         style: ElevatedButton.styleFrom(

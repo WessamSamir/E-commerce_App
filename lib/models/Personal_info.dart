@@ -1,4 +1,4 @@
-import 'package:flutter_demo/models/products.dart';
+import 'package:flutter_demo/models/Products.dart';
 
 class Person_info
 {
@@ -7,7 +7,7 @@ class Person_info
   late String mail;
   late String password;
   late String image;
-  List<products> cart=[];
-  List<products> fav=[];
+  List<Products> cart=[];
+  List<Products> fav=[];
   Person_info(this.name,this.phone,this.mail,this.password);
 }

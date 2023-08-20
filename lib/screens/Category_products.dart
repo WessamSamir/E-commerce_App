@@ -5,15 +5,14 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../models/Personal_info.dart';
-import '../models/products.dart';
+import '../models/Users.dart';
+import '../models/Products.dart';
 import 'product_details.dart';
 
 class category_product extends StatefulWidget {
-  // final List<products> p;
-
-  final Person_info user;
+  final String userEmail;
   final String category_name;
-  const category_product(this.user, this.category_name, {super.key});
+  const category_product(this.userEmail, this.category_name, {super.key});
 
   @override
   State<category_product> createState() => _category_productState();
@@ -36,17 +35,19 @@ class _category_productState extends State<category_product> {
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
-            List<products> productss = snapshot.data!.docs.map((doc) {
+            List<Products> productss = snapshot.data!.docs.map((doc) {
               Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-              return products(
+              return Products(
                 id: doc.id,
                 product_name: data['P_name'],
                 description: data['description'],
                 product_price: data['P_price'],
                 product_img: data['P_image'],
                 category: data['category'],
+                fav: data['fav']
               );
-            }).toList();
+            }).where((product) =>
+            product.category == widget.category_name).toList();
             return Scaffold(
               appBar: AppBar(
                 title: Text(
@@ -75,28 +76,13 @@ class _category_productState extends State<category_product> {
                     children: [
                       ListView.separated(
                         itemBuilder: (context, index) {
-                          List<products> reternedProducts = productss
-                              .where((product) =>
-                                  product.category == widget.category_name)
-                              .toList();
-                          products pr = reternedProducts[index];
+                          Products pr = productss[index];
                           return product(pr);
-                          // for (var pr in reternedProducts) {
-                          //   return product(pr);
-                          // }
-                          // for(var p in productss){
-                          //   if(p.category == widget.category_name) {
-                          //     reternedProducts.add(p);
-                          //     products pr = reternedProducts[index];
-                          //     return product(pr);
-                          //   }
-
-                          // }
                         },
                         separatorBuilder: (context, index) => const SizedBox(
                           height: 20.0,
                         ),
-                        itemCount: 4,
+                        itemCount: productss.length,
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                       ),
@@ -109,14 +95,14 @@ class _category_productState extends State<category_product> {
         });
   }
 
-  Widget product(products pr) {
+  Widget product(Products pr) {
     return GestureDetector(
       onTap: () {
         setState(() {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ProductDetails(pr, widget.user)));
+                  builder: (context) => ProductDetails(pr, widget.userEmail)));
         });
       },
       child: Stack(
@@ -145,12 +131,12 @@ class _category_productState extends State<category_product> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          setState(() {
-                            pr.fav = !pr.fav;
-                            pr.fav
-                                ? widget.user.fav.add(pr)
-                                : widget.user.fav.remove(pr);
-                          });
+                          // setState(() {
+                          //   pr.fav = !pr.fav;
+                          //   pr.fav
+                          //       ? widget.user.fav.add(pr)
+                          //       : widget.user.fav.remove(pr);
+                          // });
                         },
                         icon: Icon(
                           Icons.favorite,
@@ -162,12 +148,12 @@ class _category_productState extends State<category_product> {
                       ),
                       IconButton(
                         onPressed: () {
-                          setState(() {
-                            pr.cart = !pr.cart;
-                            pr.cart
-                                ? widget.user.cart.add(pr)
-                                : widget.user.cart.remove(pr);
-                          });
+                          // setState(() {
+                          //   pr.cart = !pr.cart;
+                          //   pr.cart
+                          //       ? widget.user.cart.add(pr)
+                          //       : widget.user.cart.remove(pr);
+                          // });
                         },
                         icon: Icon(
                           Icons.shopping_cart_sharp,

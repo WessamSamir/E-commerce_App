@@ -1,15 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../models/Personal_info.dart';
-import '../models/products.dart';
+import '../models/Users.dart';
+import '../models/Products.dart';
 import '../screens/product_details.dart';
 
 class Product_widget extends StatefulWidget {
-  final Person_info user;
-  final products product;
-  const Product_widget(this.product,this.user);
+  // final Person_info user;
+  // final Users u;
+  final DocumentSnapshot snapshot;
+final String userEmail;
+  final Products product;
+  const Product_widget(this.product, this.userEmail, this.snapshot);
 
   @override
   State<Product_widget> createState() => _Product_widgetState();
@@ -17,6 +22,9 @@ class Product_widget extends StatefulWidget {
 
 class _Product_widgetState extends State<Product_widget> {
   double screenWidth=0;
+
+
+
   @override
   Widget build(BuildContext context) {
     final screenWidth1 = MediaQuery.of(context).size.width;
@@ -24,7 +32,7 @@ class _Product_widgetState extends State<Product_widget> {
     return  GestureDetector(
       onTap: (){
         setState(() {
-          Navigator.push(context,MaterialPageRoute(builder: (context)=>ProductDetails(widget.product,widget.user)));
+          Navigator.push(context,MaterialPageRoute(builder: (context)=>ProductDetails(widget.product,widget.userEmail)));
         });
       },
       child: Container(
@@ -88,7 +96,7 @@ class _Product_widgetState extends State<Product_widget> {
                       IconButton(onPressed: (){
                         setState(() {
                           widget.product.cart=!widget.product.cart;
-                          widget.product.cart?widget.user.cart.add(widget.product):widget.user.cart.remove(widget.product);
+                          widget.product.cart?widget.product.cart=true:widget.product.cart=false;
                         });
                       },
                         icon: Icon(
@@ -109,7 +117,20 @@ class _Product_widgetState extends State<Product_widget> {
                         onPressed: (){
                           setState(() {
                             widget.product.fav=!widget.product.fav;
-                            widget.product.fav?widget.user.fav.add(widget.product):widget.user.fav.remove(widget.user);
+                            widget.product.fav?widget.product.fav=true:widget.product.fav=false;
+                              FirebaseFirestore.instance
+                                  .collection('products')
+                                  .doc(widget.snapshot.id)
+                                  .update({
+                                'fav': widget.product.fav,
+                              }).then((_) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Profile updated successfully')),
+                                );
+                              }).catchError((error) {
+                                print('Error updating profile: $error');
+                              });
+
                           });
                         },
                         icon: Icon(

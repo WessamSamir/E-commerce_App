@@ -7,7 +7,7 @@
 // import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 //
 // import '../models/Personal_info.dart';
-// import '../models/products.dart';
+// import '../models/Products.dart';
 //
 // class category_product extends StatefulWidget {
 //   final List<products> p;
