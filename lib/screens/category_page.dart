@@ -3,16 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/screens/Category_products.dart';
 import '../models/Category.dart';
-import '../models/Personal_info.dart';
 import '../models/Users.dart';
 import '../models/Products.dart';
 
 class Category_page extends StatefulWidget {
-  // final Person_info user;
   // final Users user;
   final String userEmail;
   final List<List<Products>> Categories;
-  const Category_page(this.Categories, this.userEmail);
+  final DocumentSnapshot snapshot;
+  const Category_page(this.Categories, this.userEmail, this.snapshot);
 
   @override
   State<Category_page> createState() => _Category_pageState();
@@ -59,7 +58,7 @@ class _Category_pageState extends State<Category_page> {
     return InkWell(
       onTap: (){
         // Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProductsPage()));
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>category_product(widget.userEmail,c.name)));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>category_product(widget.userEmail,c.name, snapshot: widget.snapshot,)));
       },
       child: Container(
         height: screenWidth*0.6,

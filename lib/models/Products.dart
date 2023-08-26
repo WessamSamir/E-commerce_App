@@ -36,6 +36,7 @@ class Products {
         required this.fav,
       });
 
+
   factory Products.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot) {
     final data = snapshot.data()!;
     return Products(

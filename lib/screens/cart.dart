@@ -1,15 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/models/Cart_model.dart';
-import '../models/Personal_info.dart';
+import 'package:flutter_demo/models/Product_model.dart';
+import 'package:flutter_demo/services/store.dart';
 import '../models/Products.dart';
 
 class Cart_page extends StatefulWidget {
-  // final Person_info user;
-  // final List<Products> products;
   final String userEmail;
-  const Cart_page(this.userEmail);
+  final DocumentSnapshot snapshot;
+  const Cart_page(this.userEmail, this.snapshot);
 
   @override
   State<Cart_page> createState() => _Cart_pageState();
@@ -17,21 +16,32 @@ class Cart_page extends StatefulWidget {
 
 class _Cart_pageState extends State<Cart_page> {
   double screenWidth = 0;
-  // List<CartProducts> cartProducts = [];
-  // Widget b(context, index) {
-  //   List<CartProducts> cartProducts = productss
-  //       .where((product) =>
-  //   product.userEmail == widget.userEmail)
-  //       .toList();
-  //   CartProducts cartP = cartProducts[index];
-  //   return Cart_product(cartP, index);
+  double totalPrice = 0;
+  Store store = new  Store();
+
+  // void _deleteProduct() async {
+  //   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  //
+  //   firestore
+  //       .collection('user_orders')
+  //       .where('user_email', isEqualTo: widget.userEmail)
+  //       .limit(1)
+  //       .get()
+  //       .then((QuerySnapshot querySnapshot) {
+  //     if (querySnapshot.docs.isNotEmpty) {
+  //       QueryDocumentSnapshot documentSnapshot = querySnapshot.docs.first;
+  //       DocumentReference documentRef = documentSnapshot.reference;
+  //       documentRef.delete();
+  //     } else {
+  //       print('user not found');
+  //     }
+  //   });
   // }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth1 = MediaQuery.of(context).size.width;
     screenWidth = screenWidth1;
-    var cartProducts;
     return StreamBuilder<QuerySnapshot>(
         stream:
             FirebaseFirestore.instance.collection('user_orders').snapshots(),
@@ -42,25 +52,29 @@ class _Cart_pageState extends State<Cart_page> {
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
-            List<CartProducts> productss = snapshot.data!.docs.map((doc) {
-              Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-              return CartProducts(
-                userEmail: data['user_email'],
-                product_name: data['product_name'],
-                product_price: data['product_price'],
-                product_img: data['product_img'],
-                  quantity: data['quantity'],
-              );
-            }).where((product) => product.userEmail == widget.userEmail).toList();
+            List<ProductModel> productss = snapshot.data!.docs
+                .map((doc) {
+                  Map<String, dynamic> data =
+                      doc.data() as Map<String, dynamic>;
+                  return ProductModel(
+                    userEmail: data['user_email'],
+                    product_name: data['product_name'],
+                    product_price: data['product_price'],
+                    product_img: data['product_img'],
+                    quantity: data['quantity'],
+                  );
+                })
+                .where((product) => product.userEmail == widget.userEmail)
+                .toList();
             return Padding(
-              padding: EdgeInsetsDirectional.all(20.0),
+              padding: const EdgeInsetsDirectional.all(20.0),
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Column(
                   children: [
                     ListView.separated(
                       itemBuilder: (context, index) {
-                        CartProducts cartP = productss[index];
+                        ProductModel cartP = productss[index];
                         return Cart_product(cartP, index);
                         // Cart_product(widget.products[index1], index1)
                       },
@@ -68,7 +82,7 @@ class _Cart_pageState extends State<Cart_page> {
                         height: 20.0,
                       ),
                       itemCount: productss.length,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                     ),
                   ],
@@ -79,7 +93,7 @@ class _Cart_pageState extends State<Cart_page> {
         });
   }
 
-  Widget Cart_product(CartProducts p, index) {
+  Widget Cart_product(ProductModel p, index) {
     return GestureDetector(
       onTap: () {},
       child: Container(
@@ -87,7 +101,7 @@ class _Cart_pageState extends State<Cart_page> {
             borderRadius: BorderRadius.circular(screenWidth * 0.05),
             color: index % 2 == 0
                 ? Colors.black12
-                : Color.fromRGBO(1, 126, 120, 1.0),
+                : const Color.fromRGBO(1, 126, 120, 1.0),
           ),
           height: screenWidth * 0.4,
           child: Stack(
@@ -132,7 +146,7 @@ class _Cart_pageState extends State<Cart_page> {
                               style: TextStyle(
                                 fontFamily: 'fastForward',
                                 fontSize: screenWidth * 0.02,
-                                color: Color.fromRGBO(225, 162, 1, 1.0),
+                                color: const Color.fromRGBO(225, 162, 1, 1.0),
                               ),
                             ),
                           ),
@@ -179,11 +193,11 @@ class _Cart_pageState extends State<Cart_page> {
                                 child: Container(
                                   width: screenWidth * 0.1,
                                   height: screenWidth * 0.1,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: Colors.black,
                                   ),
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.add,
                                     color: Colors.white,
                                   ),
@@ -201,11 +215,11 @@ class _Cart_pageState extends State<Cart_page> {
                                 child: Container(
                                   width: screenWidth * 0.1,
                                   height: screenWidth * 0.1,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: Colors.black,
                                   ),
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.remove,
                                     color: Colors.white,
                                   ),
@@ -234,17 +248,15 @@ class _Cart_pageState extends State<Cart_page> {
                 ),
                 child: Center(
                   child: IconButton(
-                    onPressed: () {
-
-                      // setState(() {
-                      //   p.cart=!p.cart;
-                      //   if(!p.cart)
-                      //     widget.user.cart.remove(p);
-                      // });
+                    onPressed: ()  {
+                      p.cart =false;
+                      totalPrice += p.product_price * p.quantity;
+                      store.deleteProduct(widget.snapshot, p.product_name);
                     },
                     icon: Icon(
                       Icons.shopping_cart_sharp,
-                      color: p.cart ? Colors.lightBlueAccent : Colors.white70,
+                      // color: p.cart ? Colors.lightBlueAccent : Colors.white70,
+                      color: Colors.lightBlueAccent,
                       size: screenWidth * 0.06,
                     ),
                   ),

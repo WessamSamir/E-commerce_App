@@ -3,13 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../models/Personal_info.dart';
+import '../models/Product_model.dart';
 import '../models/Products.dart';
 import '../models/Users.dart';
 import '../widgets/Product_widget.dart';
 
 class Favourite_page extends StatefulWidget {
-  // final Person_info user;
   // final Users u;
   final DocumentSnapshot snapshot;
   final String userEmail;
@@ -21,14 +20,14 @@ class Favourite_page extends StatefulWidget {
 
 class _Favourite_pageState extends State<Favourite_page> {
   double screenWidth = 0;
-  late DocumentSnapshot<Map<String, dynamic>> u;
+  // late DocumentSnapshot<Map<String, dynamic>> u;
 
   @override
   Widget build(BuildContext context) {
     final screenWidth1 = MediaQuery.of(context).size.width;
     screenWidth = screenWidth1;
     return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('products').snapshots(),
+        stream: FirebaseFirestore.instance.collection('fav_products').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator();
@@ -38,16 +37,22 @@ class _Favourite_pageState extends State<Favourite_page> {
           } else {
             List<Products> productss = snapshot.data!.docs.map((doc) {
               Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+              print(data);
+              print('doc id');
+              print(doc.id);
               return Products(
-                  id: doc.id,
-                  product_name: data['P_name'],
-                  description: data['description'],
-                  product_price: data['P_price'],
-                  product_img: data['P_image'],
+                // userEmail: data['userEmail'],
+                  id: widget.snapshot.id,
+                  product_name: data['product_name'],
+                  description: data['product_description'],
+                  product_price: data['product_price'],
+                  product_img: data['product_img'],
                   category: data['category'],
                   fav: data['fav']);
             }).where((product) =>
             product.fav == true).toList();
+            print('user id');
+            print(widget.snapshot.id);
             return Padding(
               padding: EdgeInsetsDirectional.all(20.0),
               child: SingleChildScrollView(
@@ -57,9 +62,9 @@ class _Favourite_pageState extends State<Favourite_page> {
                     ListView.separated(
                       itemBuilder: (context, index) {
                         return Product_widget(
-                            productss[index],
+                          productss[index],
                           widget.userEmail,
-                          widget.snapshot,
+                          widget.snapshot
                         );
                       },
                       //     (context, index1) => Product_widget(

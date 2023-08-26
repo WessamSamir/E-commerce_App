@@ -1,4 +1,5 @@
-class CartProducts {
+
+class ProductModel {
   final String userEmail;
   final String product_name;
   final int product_price;
@@ -7,11 +8,13 @@ class CartProducts {
   late bool cart= false;
   int quantity = 1;
 
-  CartProducts(
+  ProductModel(
       {required this.userEmail,
       required this.product_name,
       required this.product_price,
       required this.product_img,
         required this.quantity,
       });
+
+
 }

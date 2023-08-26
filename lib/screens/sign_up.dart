@@ -466,7 +466,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo/screens/profile.dart';
 import 'package:flutter_demo/services/fireStore.dart';
 import '../constants.dart';
-import '../models/Personal_info.dart';
+import '../models/Products.dart';
 import '../models/Users.dart';
 import '../widgets/CustemTextFormField.dart';
 import 'package:flutter_demo/services/auth.dart';
@@ -484,9 +484,7 @@ class _SignUpState extends State<SignUp> {
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   String? _email, _password, _confirmPass, _name, _phone;
   final _auth = Auth();
-  // final _store = Store();
-  // Person_info person=Person_info("Loay Mohamed", "01121510042", "looay432@gmail.com","2001369105694");
-  // // late Person_info person;
+  final List<Products> cartProduct = [];
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
@@ -500,19 +498,13 @@ class _SignUpState extends State<SignUp> {
     String password = _passwordController.text;
 
     // Get other sign-up field values as needed
-
     FirebaseFirestore.instance.collection('users').add({
       'name': name,
       'email': email,
       'phone' : phone,
       'password': password,
-      // Add other sign-up field values to be stored in Firestore as needed
-    }).then((value) {
-      // Navigate to the profile screen after successful sign-up
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => InitialPage(userId: value.id)),
-      // );
+      // 'cartProduct': [],
+      // 'favProduct': [],
     }).catchError((error) {
       // Handle sign-up error
       print('Error signing up: $error');

@@ -9,7 +9,6 @@
 // import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 // import 'package:image_picker/image_picker.dart';
 // import '../models/Category.dart';
-// import '../models/Personal_info.dart';
 // import '../models/Products.dart';
 // import 'Category.dart';
 //
@@ -55,11 +54,11 @@
 //   String Image_url= "https://images.pexels.com/photos/213780/pexels-photo-213780.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500";
 //   int current_index=0;
 //   List<IconData> navbar_icons=[FontAwesomeIcons.home,MdiIcons.earth,MdiIcons.cartOutline,FontAwesomeIcons.userCircle];
-//   List<products> home_products=[
-//     products(product_name: 'Cookies',product_price: 50, product_img: 'https://th.bing.com/th/id/OIP.6e8n0Naqmwjg-IbT1UjkewHaE6?pid=ImgDet&rs=1', category:'Food',
-//         description:"A cookie is a small sweet, crispy or cake-like pastry most often made with flour, sugar, liquid and fat. They are characterized by:", id: ''),
-//     products(product_name: 'Cookies',product_price: 50,product_img: 'https://th.bing.com/th/id/OIP.6e8n0Naqmwjg-IbT1UjkewHaE6?pid=ImgDet&rs=1',category:'Food' ,
-//         description: "Cookies are baked treats. A cookie is a small sweet, crispy or cake-like pastry most often made with flour, sugar, liquid and fat. They are characterized by:",id: ''),
+//   List<Products> home_products=[
+//     Products(product_name: 'Cookies',product_price: 50, product_img: 'https://th.bing.com/th/id/OIP.6e8n0Naqmwjg-IbT1UjkewHaE6?pid=ImgDet&rs=1', category:'Food',
+//         description:"A cookie is a small sweet, crispy or cake-like pastry most often made with flour, sugar, liquid and fat. They are characterized by:", id: '', fav: false),
+//     Products(product_name: 'Cookies',product_price: 50,product_img: 'https://th.bing.com/th/id/OIP.6e8n0Naqmwjg-IbT1UjkewHaE6?pid=ImgDet&rs=1',category:'Food' ,
+//         description: "Cookies are baked treats. A cookie is a small sweet, crispy or cake-like pastry most often made with flour, sugar, liquid and fat. They are characterized by:",id: '', fav: false),
 //   ];
 //   List<Catego> cat=[
 //     Catego("Food", "Assets/images/food category.jpg"),
@@ -77,7 +76,7 @@
 //   TextEditingController phone=TextEditingController();
 //   TextEditingController email=TextEditingController();
 //   TextEditingController password=TextEditingController();
-//   Person_info person=Person_info("Loay Mohamed", "01121510042", "looay432@gmail.com","2001369105694");
+//   // Person_info person=Person_info("Loay Mohamed", "01121510042", "looay432@gmail.com","2001369105694");
 //   String profile_image_path='';
 //   bool product_opend=false;
 //

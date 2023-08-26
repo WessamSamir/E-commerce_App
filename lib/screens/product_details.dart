@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo/models/Users.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../models/Personal_info.dart';
 import '../models/Products.dart';
+import '../services/store.dart';
 import 'Initial_page.dart';
 
 
@@ -12,7 +12,8 @@ import 'Initial_page.dart';
 class ProductDetails extends StatefulWidget {
   final Products product;
   final String userEmail;
-  const ProductDetails( this.product,this.userEmail );
+  final DocumentSnapshot snapshot;
+  const ProductDetails( this.product,this.userEmail, this.snapshot );
 
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
@@ -24,20 +25,10 @@ class _ProductDetailsState extends State<ProductDetails> {
   int counter = 0;
   bool addedToFavorite = false;
   Color favColor = Colors.cyan;
+  List<Products> p = [];
+  // Products pr;
 
-  void _addToCart(Products product) {
-
-    FirebaseFirestore.instance.collection('user_orders').add({
-      'user_email': widget.userEmail,
-      'product_name': product.product_name,
-      'product_price' : product.product_price,
-      'product_img': product.product_img,
-      'quantity' : product.amount,
-    }).catchError((error) {
-      // Handle sign-up error
-      print('Error: $error');
-    });
-  }
+  Store store = new Store();
 
   Future<void> _addToUserCart(String userEmail, Products prod) async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -57,6 +48,31 @@ class _ProductDetailsState extends State<ProductDetails> {
     });
   }
 
+  Future<void> _updatecartProduct(String userEmail, List<Products> prod) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    // DocumentReference userRef = FirebaseFirestore.instance.collection('users').doc(widget.snapshot.id);
+    //
+    // // Update the user's cart field with the provided list of products
+    // await userRef.update({'cartProduct': FieldValue.arrayUnion(prod)});
+    // firestore
+    //     .collection('users')
+    //     .where('email', isEqualTo: userEmail);
+
+    DocumentReference documentRef = firestore.collection('users').doc(widget.snapshot.id);
+    documentRef
+    .update({
+      'cartProduct': FieldValue.arrayUnion([
+          Products(id: '', product_name: 'skirt', product_price: 100, product_img: '', category: 'clothes', description: 'description', fav: false),
+        Products(id: '', product_name: 'skirt', product_price: 100, product_img: '', category: 'clothes', description: 'description', fav: false)
+      ]),
+    }).then((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('cart updated successfully')),
+      );
+    }).catchError((error) {
+      print('Error updating cart: $error');
+    });
+  }
 
   // void _addToUserCart(String userEmail,Products prod) async {
   //   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -130,8 +146,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                             direction: Axis.horizontal,
                             allowHalfRating: true,
                             itemCount: 5,
-                            itemPadding: EdgeInsetsDirectional.all(4.0),
-                            itemBuilder: (context, _) => Icon(
+                            itemPadding: const EdgeInsetsDirectional.all(4.0),
+                            itemBuilder: (context, _) => const Icon(
                               FontAwesomeIcons.solidHeart,
                               color: Colors.white60,
                             ),
@@ -276,20 +292,20 @@ class _ProductDetailsState extends State<ProductDetails> {
                   Container(
                     padding: const EdgeInsets.all(18.0),
                     height: 60,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Color.fromRGBO(1, 56, 36, 1.0),
-                      borderRadius: const BorderRadius.all(Radius.circular(40.0)),
+                      borderRadius: BorderRadius.all(Radius.circular(40.0)),
                     ),
                     child: Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.favorite,
                           color: Colors.red,
                         ),
-                        SizedBox(width: 10.0,),
+                        const SizedBox(width: 10.0,),
                         Text(
                           "${widget.product.rating}",
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                           ),
                         ),
@@ -300,12 +316,15 @@ class _ProductDetailsState extends State<ProductDetails> {
                     padding: const EdgeInsets.all(18.0),
                     width: 80,
                     height: 60,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Color.fromRGBO(0, 54, 39, 1.0),
-                      borderRadius: const BorderRadius.all(Radius.circular(80.0)),
+                      borderRadius: BorderRadius.all(Radius.circular(80.0)),
                     ),
                     child: GestureDetector(
                       onTap: (){
+                        widget.product.fav=true;
+                        store.addToFavourite(widget.product, widget.snapshot);
+                        // store.addProductsForUser(widget.snapshot, widget.product);
                         // setState(() {
                         //   widget.product.fav=!widget.product.fav;
                         //   widget.product.fav?widget.user.fav.add(widget.product):widget.user.fav.remove(widget.product);
@@ -332,7 +351,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     width: 350,
 
                     child:  ExpansionTile(
-                      title: Text(
+                      title: const Text(
                         "Description",
                         style: TextStyle(
                           fontSize: 20,
@@ -343,7 +362,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         Text(
                           //widget.product.description,
                           "${widget.product.description}",
-                          style:  TextStyle(
+                          style:  const TextStyle(
                               height: 1.5,
                               wordSpacing: 5,
                               color: Colors.black54,
@@ -417,12 +436,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                       ),
                       ElevatedButton(
                         onPressed: (){
-                          setState(() {
-                            widget.product.cart=true;
-                            // widget.user.cart.add(widget.product);
-                            _addToCart(widget.product);
-                            _addToUserCart(widget.userEmail,widget.product);
-                          });
+                          widget.product.cart=true;
+                          // widget.user.cart.add(widget.product);
+                          store.addToCart(widget.product,widget.snapshot);
+                          // _addToUserCart(widget.userEmail,widget.product);
+                          p.add(widget.product);
+                          _updatecartProduct(widget.userEmail, p);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.cyan.shade500,

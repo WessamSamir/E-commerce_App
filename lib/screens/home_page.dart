@@ -3,12 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
-import '../models/Personal_info.dart';
 import '../models/Products.dart';
 import '../widgets/Product_widget.dart';
 
 class Home_page extends StatefulWidget {
-  // final Person_info user;
   final List<Products> Top_saling;
   final List<Products> for_you;
   Home_page(this.Top_saling,this.for_you);

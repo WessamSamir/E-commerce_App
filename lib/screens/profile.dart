@@ -29,17 +29,25 @@ class _Profile_pageState extends State<Profile_page> {
   @override
   void initState() {
     super.initState();
-    user_name = TextEditingController(text: widget.snapshot['name']);
-    phone = TextEditingController(text: widget.snapshot['phone']);
-    email = TextEditingController(text: widget.snapshot['email']);
-    password = TextEditingController(text: widget.snapshot['password']);
+    user_name = TextEditingController();
+    phone = TextEditingController();
+    email = TextEditingController();
+    password = TextEditingController();
   }
 
-  void _updateProfile() {
-    String newName = user_name.text;
-    String newEmail = email.text;
-    String newPassword = password.text;
-    String newPhone = phone.text;
+  void _updateProfile(Map<String, dynamic> data) {
+    String newName = user_name.text != ''
+        ? user_name.text
+        : data["name"];
+    String newEmail = email.text != ''
+        ? email.text
+        : data["email"];
+    String newPhone = phone.text != ''
+        ? phone.text
+        : data["phone"];
+    String newPassword = password.text != ''
+        ? password.text
+        : data["password"];
 
     FirebaseFirestore.instance
         .collection('users')
@@ -69,14 +77,11 @@ class _Profile_pageState extends State<Profile_page> {
               .doc(widget.snapshot.id)
               .get(),
           builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            }
             if (snapshot.hasError) {
               return const Text('Error retrieving profile data');
             }
             if (!snapshot.hasData || !snapshot.data!.exists) {
-              return const Text('Profile data not found');
+              return const CircularProgressIndicator();
             }
 
             Map<String, dynamic> data =
@@ -239,7 +244,7 @@ class _Profile_pageState extends State<Profile_page> {
                                 borderRadius:
                                     BorderRadius.circular(screenWidth * 0.05),
                               ),
-                              hintText: data["phone"],
+                              hintText: data['phone'],
                               hintStyle: TextStyle(
                                 overflow: TextOverflow.fade,
                                 fontFamily: 'Amperzand',
@@ -255,6 +260,7 @@ class _Profile_pageState extends State<Profile_page> {
                                 FontAwesomeIcons.phoneVolume,
                                 color: Colors.black,
                               )),
+                          keyboardType: TextInputType.phone,
                         ),
                       ),
                       SizedBox(
@@ -281,7 +287,7 @@ class _Profile_pageState extends State<Profile_page> {
                                 borderRadius:
                                     BorderRadius.circular(screenWidth * 0.05),
                               ),
-                              hintText: data["email"],
+                              hintText: data['email'],
                               hintStyle: TextStyle(
                                 overflow: TextOverflow.fade,
                                 fontFamily: 'Amperzand',
@@ -297,6 +303,7 @@ class _Profile_pageState extends State<Profile_page> {
                                 MdiIcons.emailBox,
                                 color: Colors.black,
                               )),
+                          keyboardType: TextInputType.emailAddress,
                         ),
                       ),
                       SizedBox(
@@ -323,7 +330,7 @@ class _Profile_pageState extends State<Profile_page> {
                                 borderRadius:
                                     BorderRadius.circular(screenWidth * 0.05),
                               ),
-                              hintText: data["password"],
+                              hintText: data['password'],
                               hintStyle: TextStyle(
                                 overflow: TextOverflow.fade,
                                 fontFamily: 'Amperzand',
@@ -361,8 +368,12 @@ class _Profile_pageState extends State<Profile_page> {
                       ),
                       MaterialButton(
                         onPressed: () {
-                          _updateProfile();
+                            setState(() {
+                              _updateProfile(data);
+
+                            });
                           // setState(() {
+                          //   print(user_name.text);
                           //   save_changes =  Color.fromRGBO(1, 126, 120, 1.0);
                           //   data["name"] = user_name.text != ''
                           //       ? user_name.text
@@ -374,9 +385,10 @@ class _Profile_pageState extends State<Profile_page> {
                           //   data["password"] = password.text != ''
                           //       ? password.text
                           //       : data["password"];
-                          //   print(user_name.text);
-                          //   print(data["name"]);
+                          //   // print(user_name.text);
                           // });
+                          print(data["name"]);
+
                         },
                         child: Container(
                           decoration: BoxDecoration(

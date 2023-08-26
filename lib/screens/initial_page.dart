@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo/screens/profile.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import '../models/Personal_info.dart';
 import '../models/Users.dart';
 import '../models/Products.dart';
 import 'Home_page.dart';
@@ -15,7 +14,6 @@ import 'navigation_bar.dart';
 
 class InitialPage extends StatefulWidget {
   final DocumentSnapshot snapshot;
-  // final Users us;
   const InitialPage({super.key, required this.snapshot});
 
   @override
@@ -87,11 +85,9 @@ class _InitialPage extends State<InitialPage> {
   Widget build(BuildContext context)  {
     final screenWidth1 = MediaQuery.of(context).size.width;
     screenWidth=screenWidth1;
-    // final Users us = us.id;
     String userEmail = widget.snapshot['email'];
-    // DocumentSnapshot<Map<String, dynamic>> p = await getUser();
-    // List<Widget> pages=[Home_page(person,Top_saling,for_you),Favourite_page(person),Category_page(person,Categories),Cart_page(person),Profile_page(widget.snapshot)];
-    List<Widget> pages=[Home_page(Top_saling,for_you),Favourite_page(userEmail, widget.snapshot),Category_page(Categories,userEmail),Cart_page(userEmail,),Profile_page(widget.snapshot)];
+    List<Widget> pages=[Home_page(Top_saling,for_you),Favourite_page(userEmail, widget.snapshot),Category_page(Categories,userEmail, widget.snapshot),Cart_page(userEmail,widget.snapshot),Profile_page(widget.snapshot)];
+    // List<Widget> pages=[Home_page(Top_saling,for_you),Category_page(Categories,userEmail, widget.snapshot),Cart_page(userEmail,widget.snapshot),Profile_page(widget.snapshot)];
 
     return Scaffold(
       appBar: AppBar(

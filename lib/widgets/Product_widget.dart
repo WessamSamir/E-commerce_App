@@ -1,16 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/models/Product_model.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../models/Personal_info.dart';
 import '../models/Users.dart';
 import '../models/Products.dart';
 import '../screens/product_details.dart';
+import '../services/store.dart';
 
 class Product_widget extends StatefulWidget {
-  // final Person_info user;
-  // final Users u;
   final DocumentSnapshot snapshot;
 final String userEmail;
   final Products product;
@@ -22,7 +21,7 @@ final String userEmail;
 
 class _Product_widgetState extends State<Product_widget> {
   double screenWidth=0;
-
+Store store = Store();
 
 
   @override
@@ -32,7 +31,7 @@ class _Product_widgetState extends State<Product_widget> {
     return  GestureDetector(
       onTap: (){
         setState(() {
-          Navigator.push(context,MaterialPageRoute(builder: (context)=>ProductDetails(widget.product,widget.userEmail)));
+          Navigator.push(context,MaterialPageRoute(builder: (context)=>ProductDetails(widget.product,widget.userEmail, widget.snapshot)));
         });
       },
       child: Container(
@@ -46,16 +45,16 @@ class _Product_widgetState extends State<Product_widget> {
           child: Stack(
             alignment: Alignment.topCenter,
             children: [
-              Container(
+              SizedBox(
                 height: screenWidth*0.6,
                 child: Image.network(
-                  '${widget.product.product_img}',
+                  widget.product.product_img,
                   fit: BoxFit.cover,
                 ),
               ),
               Text(
-                '${widget.product.category}',
-                style: TextStyle(
+                widget.product.category,
+                style: const TextStyle(
                   fontFamily: 'Sweety',
                   color: Colors.white54,
                   fontSize:25.0,
@@ -66,8 +65,8 @@ class _Product_widgetState extends State<Product_widget> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    '${widget.product.product_name}',
-                    style: TextStyle(
+                    widget.product.product_name,
+                    style: const TextStyle(
                       fontFamily: 'Arial',
                       color: Colors.white,
                       fontSize:30.0,
@@ -80,8 +79,8 @@ class _Product_widgetState extends State<Product_widget> {
                     direction: Axis.horizontal,
                     allowHalfRating: true,
                     itemCount: 5,
-                    itemPadding: EdgeInsetsDirectional.all(4.0),
-                    itemBuilder: (context, _) => Icon(
+                    itemPadding: const EdgeInsetsDirectional.all(4.0),
+                    itemBuilder: (context, _) => const Icon(
                       FontAwesomeIcons.solidHeart,
                       color: Colors.white,
                     ),
@@ -89,14 +88,23 @@ class _Product_widgetState extends State<Product_widget> {
                       print(rating);
                     },
                   ),
-                  SizedBox(height: 5.0,),
+                  const SizedBox(height: 5.0,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      IconButton(onPressed: (){
+                      IconButton(onPressed: () async {
+                        if(await store.checkProductExists(widget.product, widget.snapshot))
+                        {
+                        print('exist and delete');
+                        widget.product.cart= false;
+                        store.deleteProduct(widget.snapshot,widget.product.product_name);
+                        }else {
+                        print('not exist');
+                        widget.product.cart = true;
+                        store.addToCart(widget.product,widget.snapshot);
+                        }
                         setState(() {
-                          widget.product.cart=!widget.product.cart;
-                          widget.product.cart?widget.product.cart=true:widget.product.cart=false;
+
                         });
                       },
                         icon: Icon(
@@ -107,7 +115,7 @@ class _Product_widgetState extends State<Product_widget> {
                       ),
                       Text(
                         '${widget.product.product_price} \$ ',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'fastForward',
                           fontSize: 30.0,
                           color: Colors.white,
@@ -115,27 +123,16 @@ class _Product_widgetState extends State<Product_widget> {
                       ),
                       IconButton(
                         onPressed: (){
+                          widget.product.fav = false;
+                          store.UnFavProduct(widget.snapshot, widget.product.product_name);
                           setState(() {
-                            widget.product.fav=!widget.product.fav;
-                            widget.product.fav?widget.product.fav=true:widget.product.fav=false;
-                              FirebaseFirestore.instance
-                                  .collection('products')
-                                  .doc(widget.snapshot.id)
-                                  .update({
-                                'fav': widget.product.fav,
-                              }).then((_) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Profile updated successfully')),
-                                );
-                              }).catchError((error) {
-                                print('Error updating profile: $error');
-                              });
-
+                            // widget.product.fav=!widget.product.fav;
+                            // widget.product.fav?widget.product.fav=true:widget.product.fav=false;
                           });
                         },
                         icon: Icon(
                           Icons.favorite,
-                          color: widget.product.fav? Color.fromRGBO(255, 33, 131, 1.0):Colors.white70,
+                          color: widget.product.fav? const Color.fromRGBO(255, 33, 131, 1.0):Colors.white70,
                           size: 30.0,
                         ),
                       ),

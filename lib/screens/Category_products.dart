@@ -4,15 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../models/Personal_info.dart';
 import '../models/Users.dart';
 import '../models/Products.dart';
+import '../services/store.dart';
 import 'product_details.dart';
 
 class category_product extends StatefulWidget {
   final String userEmail;
   final String category_name;
-  const category_product(this.userEmail, this.category_name, {super.key});
+  final DocumentSnapshot snapshot;
+  const category_product(this.userEmail, this.category_name, {super.key, required this.snapshot});
 
   @override
   State<category_product> createState() => _category_productState();
@@ -20,8 +21,9 @@ class category_product extends StatefulWidget {
 
 class _category_productState extends State<category_product> {
   double screenWidth = 0;
+  Store store = new Store();
 
-  @override
+
   @override
   Widget build(BuildContext context) {
     final screenWidth1 = MediaQuery.of(context).size.width;
@@ -102,7 +104,7 @@ class _category_productState extends State<category_product> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ProductDetails(pr, widget.userEmail)));
+                  builder: (context) => ProductDetails(pr, widget.userEmail,widget.snapshot)));
         });
       },
       child: Stack(
@@ -130,7 +132,20 @@ class _category_productState extends State<category_product> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       IconButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          if(await store.checkProductFav(pr, widget.snapshot))
+                          {
+                          print('exist and delete');
+                          pr.fav =false;
+                          store.UnFavProduct(widget.snapshot,pr.product_name);
+                          }else {
+                          print('not fav');
+                          pr.fav = true;
+                          store.addToFavourite(pr,widget.snapshot);
+                          }
+                          setState(() {
+
+                          });
                           // setState(() {
                           //   pr.fav = !pr.fav;
                           //   pr.fav
@@ -147,12 +162,26 @@ class _category_productState extends State<category_product> {
                         ),
                       ),
                       IconButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          if(await store.checkProductExists(pr, widget.snapshot))
+                            {
+                              print('exist and delete');
+                              pr.cart= false;
+                              store.deleteProduct(widget.snapshot,pr.product_name);
+                            }else {
+                            print('not exist');
+                            pr.cart = true;
+                            store.addToCart(pr,widget.snapshot);
+                          }
+                          setState(() {
+
+                          });
+                          print(pr.cart);
                           // setState(() {
-                          //   pr.cart = !pr.cart;
-                          //   pr.cart
-                          //       ? widget.user.cart.add(pr)
-                          //       : widget.user.cart.remove(pr);
+                          //   // pr.cart = !pr.cart;
+                          //   // pr.cart
+                          //   //     ? widget.user.cart.add(pr)
+                          //   //     : widget.user.cart.remove(pr);
                           // });
                         },
                         icon: Icon(

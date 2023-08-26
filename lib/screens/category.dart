@@ -6,7 +6,7 @@
 // import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 // import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 //
-// import '../models/Personal_info.dart';
+// import '../models/Fav_products.dart';
 // import '../models/Products.dart';
 //
 // class category_product extends StatefulWidget {
